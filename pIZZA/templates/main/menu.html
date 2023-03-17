@@ -1,0 +1,288 @@
+{% extends 'base/base.html' %}
+{% load custom_tags %}
+{% block tittle %}Menu{% endblock tittle %}
+
+{% block cdn %}
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+<link rel="stylesheet" href="static/css/swiper.css">
+{% endblock cdn %}
+
+{% block js %}
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script src="static/js/swiper.js"></script>
+{% endblock js %}
+
+{% block content %}
+
+<style>
+	/* Define the linkactive class */
+	.linkactive {
+		background-color: rgb(250, 197, 100);
+	}
+
+	/* Add an event listener to the list items to toggle the linkactive class */
+	li {
+		cursor: pointer;
+	}
+
+	li.linkactive {
+		background-color: #FAC564;
+	}
+
+	li:hover {
+		background-image: url(static/images/food.png);
+	}
+
+	li:active {
+		background-color: #FAC564;
+	}
+</style>
+{% price_storing_in_session request.session.cart request %}
+<div style="background-image: url(static/images/bg_4.jpg) !important;background-repeat:repeat-y">
+	<section class="ftco-section pt-4">
+		<div class="container">
+			<div class="row justify-content-center mb-3 pb-3">
+				<div class="col-md-7 heading-section ftco-animate text-center">
+					<h2 class="mb-4">Our Menu </h2>
+					{% comment %} {{request.GET.category}} {{request.session.cart}} {% endcomment %}
+					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
+						live
+						the blind texts.</p>
+						{{request.path}}
+				</div>
+			</div>
+		</div>
+		<div class="container-wrap">
+			<div class=" ">
+				<div class="row">
+
+					<div class="col-2 ms-2 ">
+						<div class="card mb-3">
+							<div class="card-body" style="background-image:url(static/images/bg_4.jpg);color:aliceblue">
+								<h5 class="card-title">Product type</h5>
+
+								<ul class="list-group">
+									<!-- <li class="list-group-item active" aria-current="true">Product type</li> -->
+									{% for category in categories %}
+									<a href="/menu?category={{category.slug}}">
+										<li class="list-group-item {% if request.GET.category == category.slug %} linkactive {% endif %}"
+											style="background-image:url(static/images/bg_4.jpg);color:aliceblue">
+											{{category.name}}</li>
+									</a>
+									{% endfor %}
+								</ul>
+								<!-- <a href="#" class="btn btn-white btn-outline-white">Add to cart</a> -->
+
+							</div>
+						</div>
+					</div>
+
+					<div class="col-10">
+						<div class="d-flex">
+							<form method='get'>
+
+								<input class="form-control me-1 border-0 rounded-pill" type="search"
+									placeholder="Search" aria-label="Search" name='search' value='{{category.slug}}'>
+								<button class="btn btn-outline-light border-0 rounded-pill" type="submit">
+									<i class="bi bi-search fs-5 color-white"></i>
+								</button>
+							</form>
+						</div>
+						<div class="row">
+							
+							{% if products is not None %}
+							{% for product in products %}
+							<div class="col-md-3 text-center p-5 ">
+								<div class="menu-wrap">
+									<a href="#" class="menu-img img mb-4"
+										style="background-image: url({{product.images.first.images.url}});"></a>
+									<div class="text">
+										<h3><a href="#" class="text-black">{{product.name}}</a></h3>
+										<p class="text-black">{{product.detail|safe}}</p>
+										{% finalprice product.id product.price product.discount %}
+										<p class="price">
+											<span>
+												{% if product.finalprice is not None%}
+												{{product.finalprice|rupee_symbol}}
+												{% else %}
+												{{product.price|rupee_symbol}}
+												{% endif %}
+											</span>
+										</p>
+										{% if request.session.cart|is_in_cart:product.id %}
+										<div class="row" style="justify-content:center;">
+											<div class="form-group col-6 flex-grow-0 border border-white p-0 m-0">
+
+												<div class="input-group input-spinner">
+													<form method="post">
+														{% csrf_token %}
+														<div class="input-group-prepend">
+															<input type="text" hidden name="id" value="{{product.id}}">
+															<button class="btn btn-light" type="submit"
+																style="background-color: #FAC564;color:white"
+																id="button-plus"> + </button>
+														</div>
+													</form>
+													<input type="text" class="form-control no-gutters"
+														placeholder="{{request.session.cart|cart_count:product.id}}">
+													<form method="post">
+														{% csrf_token %}
+														<input type="text" hidden name="id" value="{{product.id}}">
+														<input type="text" hidden name="remove" value="True">
+														<div class="input-group-append">
+															<button class="btn btn-light" type="submit"
+																style="background-color: #FAC564;color:white"
+																id="button-minus"> - </button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+										{% else %}
+										<form method='post'>
+											{% csrf_token %}
+											{{product.id}}
+											<input type="text" name="id" value="{{product.id}}" hidden>
+											<button type="submit" class="btn btn-white btn-outline-white my-2">Add to
+												cart</button>
+										</form>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+							{% endif %}
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+
+
+		<div class="container">
+			<div class="row justify-content-center mb-5 pb-3 mt-5 pt-5">
+				<div class="col-md-7 heading-section text-center ftco-animate">
+					<h2 class="mb-4">Our Menu Pricing</h2>
+					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+					<p class="mt-5">Far far away, behind the word mountains, far from the countries Vokalia and
+						Consonantia,
+						there live the blind texts.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-1.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Italian Pizza</span></h3>
+								<span class="price">$20.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-2.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Hawaiian Pizza</span></h3>
+								<span class="price">$29.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-3.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Greek Pizza</span></h3>
+								<span class="price">$20.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-4.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Bacon Crispy Thins</span></h3>
+								<span class="price">$20.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-5.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Hawaiian Special</span></h3>
+								<span class="price">$49.91</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-6.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Ultimate Overload</span></h3>
+								<span class="price">$20.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-7.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Bacon Pizza</span></h3>
+								<span class="price">$20.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+					<div class="pricing-entry d-flex ftco-animate">
+						<div class="img" style="background-image: url(images/pizza-8.jpg);"></div>
+						<div class="desc pl-3">
+							<div class="d-flex text align-items-center">
+								<h3><span>Ham &amp; Pineapple</span></h3>
+								<span class="price">$20.00</span>
+							</div>
+							<div class="d-block">
+								<p>A small river named Duden flows by their place and supplies</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	
+
+</div>
+{% endblock content %}
