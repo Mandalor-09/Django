@@ -39,7 +39,10 @@
 		background-color: #FAC564;
 	}
 </style>
-{% price_storing_in_session request.session.cart request %}
+<div type='text' hidden>
+
+	{% price_storing_in_session request.session.cart request %}
+</div>
 <div style="background-image: url(static/images/bg_4.jpg) !important;background-repeat:repeat-y">
 	<section class="ftco-section pt-4">
 		<div class="container">
@@ -50,7 +53,7 @@
 					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
 						live
 						the blind texts.</p>
-						{{request.path}}
+						{% comment %} {{request.path}} {% endcomment %}
 				</div>
 			</div>
 		</div>
@@ -143,7 +146,7 @@
 										{% else %}
 										<form method='post'>
 											{% csrf_token %}
-											{{product.id}}
+											{% comment %} {{product.id}} {% endcomment %}
 											<input type="text" name="id" value="{{product.id}}" hidden>
 											<button type="submit" class="btn btn-white btn-outline-white my-2">Add to
 												cart</button>
@@ -283,6 +286,34 @@
 	</section>
 
 	
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Alertify request start -->
+{% if messages %}
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+<script>
+  $(document).ready(function () {
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
+    alertify.success('{{ message }}');
+    {% elif message.tags == 'info' %}
+    alertify.message('{{ message }}');
+    {% elif message.tags == 'warning' %}
+    alertify.warning('{{ message }}');
+    {% elif message.tags == 'error' %}
+    alertify.error('{{ message }}');
+    {% endif %}
+    {% endfor %}
+  });
+</script>
+    {% endif %}
+<!-- Alertify Request end  -->
+
 
 </div>
 {% endblock content %}

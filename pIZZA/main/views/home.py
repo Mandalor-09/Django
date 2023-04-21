@@ -13,6 +13,7 @@ class Home(View):
         products = Product.objects.filter(is_offer = True)[0:3]
         products2 = Product.objects.filter(is_offer = True)
         combos = Combo.objects.all()
+        print(request.session)
         context = {
             'categories':categories,
             'products':products,

@@ -123,5 +123,33 @@
     	</div>
     </section>
     
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Alertify request start -->
+{% if messages %}
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+<script>
+  $(document).ready(function () {
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
+    alertify.success('{{ message }}');
+    {% elif message.tags == 'info' %}
+    alertify.message('{{ message }}');
+    {% elif message.tags == 'warning' %}
+    alertify.warning('{{ message }}');
+    {% elif message.tags == 'error' %}
+    alertify.error('{{ message }}');
+    {% endif %}
+    {% endfor %}
+  });
+</script>
+    {% endif %}
+<!-- Alertify Request end  -->
+
     {% endblock content %}
    

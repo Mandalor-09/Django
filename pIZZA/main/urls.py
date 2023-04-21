@@ -5,6 +5,7 @@ from main.views.cart import Cart
 from main.views.extra import about,blog,contact,service
 
 urlpatterns = [
+    path('home',Home.as_view(),name='home'),
     path('',Home.as_view(),name='home'),
     path('menu',Menu.as_view(),name='menu'),
     path('cart',Cart.as_view(),name='cart'),

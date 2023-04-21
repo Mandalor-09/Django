@@ -64,7 +64,30 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
-        }
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    },
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
+        'SCOPE': ['email', 'public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'name',
+            'name_format',
+            'picture',
+            'short_name'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': 'path.to.callable',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v13.0',
+        'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
     },
     'twitter': {
         'SCOPE': [
@@ -75,15 +98,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online',
         }
     },
-    'facebook': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
 }
 
 
@@ -115,8 +129,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "Pizza.wsgi.application"
+LOGIN_REDIRECT_URL = '/home'
 
+WSGI_APPLICATION = "Pizza.wsgi.application"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -170,7 +189,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 
     #custom Backend
-    'accounts.backend.SettingsBackend'
+    'accounts.backend.SettingsBackend',
 ]
 
 AUTH_USER_MODEL= 'accounts.User'
@@ -206,9 +225,9 @@ EMAIL_HOST_PASSWORD='zwzexnyahnjwikft'
 
 # razorpay
 #key
-RAZORPAY_ID='rzp_test_aYbSkQPCh3cIUH'
+RAZORPAY_ID=
 
 #secret
-RAZORPAY_KEY='SwaYo9tI2mqztWGblSXm9AN3'
+RAZORPAY_KEY=
 
 

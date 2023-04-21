@@ -14,11 +14,13 @@ class Cart(View):
     def get(self, request, *args, **kwargs):
         # Get the cart and order price data from the session
         cart = request.session.get('cart')
+        print(cart,type(cart))
         keys = list(cart.keys())
         price = request.session.get('orderprice')
+        print(price,type(price))
         
         # If the order price is not set, set it to a default value of 100
-        if price is 0:
+        if price is 0 or None:
             price = int(1)
 
         # Get the list of product IDs from the cart and filter the Product objects accordingly

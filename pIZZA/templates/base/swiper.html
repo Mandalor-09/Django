@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% load custom_tags %}
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,7 @@
     <section id="tranding mt-0">
       <div class="container">
         
-        <h1 class="text-center section-heading">Tranding food</h1>
+        <h1 class="text-center section-heading">Trending food</h1>
       </div>
       <div class="container">
         <div class="swiper tranding-slider">
@@ -30,7 +30,7 @@
                 <h1 class="food-price">
                   {% comment %} {{product.finalprice}} {% endcomment %}
                   {% if product.finalprice is not None %}
-                  {{product.finalprice}}
+                  {{product.finalprice|rupee_symbol}}
                   {% else %}
                   {{product.price}}
                   {% endif %}
@@ -51,7 +51,8 @@
                   </h3>
                   <form method='post' action="{% url 'menu' %}">
                     {% csrf_token %}
-                    <input type="text" name="id" value="{{product.id}}" hidden>{{product.id}}
+                    <input type="text" name="id" value="{{product.id}}" hidden>
+                    {% comment %} {{product.id}} {% endcomment %}
                     <button type="submit" class="btn btn-white btn-outline-white my-2">Add to cart</button>
                   </form>
                 </div>

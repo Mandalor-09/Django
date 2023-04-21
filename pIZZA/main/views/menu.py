@@ -13,6 +13,7 @@ class Menu(View):
         categories = Category.objects.all()
         products = Product.objects.all()
         combos = Combo.objects.all()
+        print(request.session,'<<<<<<<<>>>')
         context = {
             'categories':categories,
             'products':products,
