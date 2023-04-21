@@ -220,14 +220,14 @@ SERVER_EMAIL='om84444@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER='om84444@gmail.com'
-EMAIL_HOST_PASSWORD='zwzexnyahnjwikft'
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
 
 # razorpay
 #key
-RAZORPAY_ID=
+RAZORPAY_ID='rzp_test_aYbSkQPCh3cIUH'
 
 #secret
-RAZORPAY_KEY=
+RAZORPAY_KEY='SwaYo9tI2mqztWGblSXm9AN3'
 
-
+#Change RAZORPAYKEY IN templates/main/cart.html in scripts in line 159
