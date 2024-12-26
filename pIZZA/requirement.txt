@@ -4,3 +4,4 @@ django-tinymce
 razorpay
 fontawesomefree
 PyJWT
+cryptography
