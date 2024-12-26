@@ -6,3 +6,6 @@ fontawesomefree
 PyJWT
 cryptography
 requests_oauthlib
+Pillow
+pandas
+matplotlib
