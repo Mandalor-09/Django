@@ -5,3 +5,4 @@ razorpay
 fontawesomefree
 PyJWT
 cryptography
+requests_oauthlib
